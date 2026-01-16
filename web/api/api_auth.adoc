@@ -489,6 +489,7 @@
 ==== Response Line
 ** `200 - OK`
 ** `404 - Not found`
+** `429 - Too many request`
 
 > và các lỗi trong bảng lỗi chung
 
@@ -508,6 +509,84 @@
   "message": "No user found with the provided email."
 }
 ----
+
+[source, json]
+----
+{
+  "status": 429,
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "13"
+}
+----
+
+=== Đặt mật khẩu
+* `POST /auth/reset-password`
+
+==== Request Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Request Body
+[cols="1,1,1,2", options="header"]
+|===
+| Name | Type | Required | Description
+
+| token | String | Có |  Token để xác nhận
+| newPassword| String | Có | mật khẩu mới của người dùng
+
+|===
+
+==== Example Request Body:
+[source,json]
+----
+{  
+  "token": "maklpqjrjf...",
+  "newPassword": "123456781231"
+}
+----
+
+==== Response Line
+** `204 - No Content`
+** `401 - Unauthorized`
+** `404 - Not found`
+
+> và các lỗi trong bảng lỗi chung
+
+==== Response Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Response Body
+
+> Empty
+
+==== Example Response Body
+[source, json]
+----
+{
+  "status": 401,
+  "code": "TOKEN_EXPIRED",
+  "message": "Token has expired."
+}
+----
+
+[source, json]
+----
+{
+  "status": 404,
+  "code": "RESOURCE_NOT_FOUND",
+  "message": "Resources not found."
+}
+----
+
 
 === Đăng xuất
 * `POST /auth/logout`
