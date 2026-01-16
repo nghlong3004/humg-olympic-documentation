@@ -1,0 +1,558 @@
+=== Đăng ký
+`POST /auth/register`
+
+==== Request Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Request Body
+[cols="2,1,1,5", options="header"]
+|===
+| Name | Type | Required | Description
+
+| fullName | String | Có | Họ và tên người dùng
+| email | String | Có | Email của người dùng
+| className | String | Không | Tên lớp trên trường học của người dùng
+| facultyId | Integer | Không | ID Khoa của người dùng
+| password | String | Có | Mật khẩu của người dùng
+| universityId | String | Có | ID trường học của người dùng
+| fullName | String | Có | Họ và tên của ngươi dùng
+
+|===
+
+
+==== Example Request Body Internal Student:
+[source,json]
+----
+{
+  "fullName": "Nguyễn Hoàng Long",
+  "email": "2321061234@student.humg.edu.vn",
+  "className": "DCCDTD68B",
+  "facultyId": 1,
+  "password": "12345678",
+  "universityId": 253,
+  "studentType": "INTERNAL"
+}
+----
+
+==== Example Request Body External Student:
+[source,json]
+----
+{
+  "fullName": "Nguyễn Hoàng Long",
+  "email": "nghlong3004@gmail.com",
+  "password": "12345678",
+  "universityId": 1,
+  "studentType": "EXTERNAL"
+}
+----
+
+==== Response Line
+** `201 - Created`
+** `409 - Data conflict`
+
+> và các lỗi trong bảng lỗi chung
+
+==== Response Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Response Body
+> Empty
+
+==== Example Response Body
+[source, json]
+----
+{
+  "status": 409,
+  "code": "EMAIL_ALREADY_EXISTS",
+  "message": "Email is already in use."
+}
+----
+
+=== Đăng nhập
+`POST /auth/login`
+
+==== Request Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Request Body
+[cols="2,1,2,2", options="header"]
+|===
+| Name | Type | Required | Description
+
+| email | String | Có | Email của người dùng
+| password | String | Có | Mật khẩu của người dùng
+
+|===
+
+
+==== Example Request Body:
+[source,json]
+----
+{
+  "email": "2321061234@student.humg.edu.vn",
+  "password": "12345678"
+}
+----
+
+[source,json]
+----
+{
+  "email": "2321060041",
+  "password": "12345678"
+}
+----
+
+
+[source,json]
+----
+{
+  "email": "nghlong3004@gmail.com",
+  "password": "12345678"
+}
+----
+
+[source,json]
+----
+{
+  "email": "nghlong3004@humg.edu.vn",
+  "password": "12345678"
+}
+----
+
+==== Response Line
+** `201 - Created`
+** `400 - Bad Request`
+** `401 - Unauthorized`
+** `403 - Forbidden`
+
+> và các lỗi trong bảng lỗi chung
+
+==== Response Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Response Body
+[cols="2,1,1,5", options="header"]
+|===
+| Name | Type | Required | Description
+
+| accessToken | String | Có | Access token dùng để xác minh what, how
+| requiresAdditionalInfo | boolean | Có | Nếu là có thì account này là lần đầu login và là sinh viên ngoài trường, yêu cầu sinh viên cung cấp tên trường
+| userLoginResponse.id | Integer | Có | ID của người dùng
+| userLoginResponse.fullName | String | Có | Họ và tên của người dùng
+| userLoginResponse.email | String | Có | Email của người dùng
+| userLoginResponse.avatarUrl | String | Có | Đường dẫn tới ảnh đại diên của người dùng
+| userLoginResponse.role | String | Có | quyền truy cập của người dùng
+| userLoginResponse.degree | String | không | Hàm vị của người dùng nếu là giảng viên
+
+|===
+
+==== Example Response Body
+[source, json]
+----
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+    "requiresAdditionalInfo": false,
+    "userLoginResponse": {
+        "id": 1,
+        "fullName": "Nguyễn Hoàng Long",
+        "email": "2321061234@student.humg.edu.vn",
+        "avatarUrl": "https://...",
+        "role": "STUDENT_INTERNAL",
+        "degree": null
+    }
+}
+----
+
+[source, json]
+----
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+    "requiresAdditionalInfo": false,
+    "userLoginResponse": {
+        "id": 2,
+        "fullName": "Nguyễn Hoàng Long",
+        "email": "nghlong300405@gmail.com",
+        "avatarUrl": "https://...",
+        "role": "STUDENT_EXTERNAL",
+        "degree": null
+    }
+}
+----
+
+[source, json]
+----
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+    "requiresAdditionalInfo": false,
+    "userLoginResponse": {
+        "id": 3,
+        "fullName": "Nguyễn Hoàng Long",
+        "email": "nghlong3004@humg.edu.vn",
+        "avatarUrl": null,
+        "role": "LECTURER",
+        "degree": "ThS."
+    }
+}
+----
+
+[source, json]
+----
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+    "requiresAdditionalInfo": false,
+    "userLoginResponse": {
+        "id": 4,
+        "fullName": "Nguyễn Hoàng Long",
+        "email": "nghlong3004@gmail.com",
+        "avatarUrl": null,
+        "role": "ADMIN",
+        "degree": null
+    }
+}
+----
+
+[source, json]
+----
+{
+  "status": 401,
+  "code": "BAD_CREDENTIALS",
+  "message": "Invalid email or password."
+}
+----
+
+[source, json]
+----
+{
+  "status": 403,
+  "code": "EMAIL_NOT_VERIFIED",
+  "message": "Account email has not been verified."
+}
+----
+
+[source, json]
+----
+{
+  "status": 403,
+  "code": "ACCOUNT_LOCKED",
+  "message": "User account is locked."
+}
+----
+
+=== Đăng nhập bằng SSO
+`POST /auth/sso`
+
+==== Request Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Request Body
+[cols="1,1,1,2", options="header"]
+|===
+| Name | Type | Required | Description
+
+| idToken | String | Có |  ID token nhận được từ SDK của phía client
+
+|===
+
+
+==== Example Request Body:
+[source,json]
+----
+{  
+  "id_token": "makkfafa..."  
+}
+----
+
+==== Response Line
+** `201 - Created`
+** `400 - Bad Request`
+** `401 - Unauthorized`
+** `403 - Forbidden`
+
+> và các lỗi trong bảng lỗi chung
+
+==== Response Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Response Body
+
+[cols="2,1,1,5", options="header"]
+|===
+| Name | Type | Required | Description
+
+| accessToken | String | Có | Access token dùng để xác minh who, what
+| requiresAdditionalInfo | boolean | Có | Nếu là có thì account này là lần đầu login và là sinh viên ngoài trường, yêu cầu sinh viên cung cấp tên trường
+| userLoginResponse.id | Integer | Có | ID của người dùng
+| userLoginResponse.fullName | String | Có | Họ và tên của người dùng
+| userLoginResponse.email | String | Có | Email của người dùng
+| userLoginResponse.avatarUrl | String | Có | Đường dẫn tới ảnh đại diên của người dùng
+| userLoginResponse.role | String | Có | quyền truy cập của người dùng
+| userLoginResponse.degree | String | không | Hàm vị của người dùng nếu là giảng viên
+
+|===
+
+==== Example Response Body
+[source, json]
+----
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+    "requiresAdditionalInfo": false,
+    "userLoginResponse": {
+        "id": 1,
+        "fullName": "Nguyễn Hoàng Long",
+        "email": "2321061234@student.humg.edu.vn",
+        "avatarUrl": "https://...",
+        "role": "STUDENT_INTERNAL",
+        "degree": null
+    }
+}
+----
+
+[source, json]
+----
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+    "requiresAdditionalInfo": false,
+    "userLoginResponse": {
+        "id": 2,
+        "fullName": "Nguyễn Hoàng Long",
+        "email": "nghlong300405@gmail.com",
+        "avatarUrl": "https://...",
+        "role": "STUDENT_EXTERNAL",
+        "degree": null
+    }
+}
+----
+
+[source, json]
+----
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+    "requiresAdditionalInfo": false,
+    "userLoginResponse": {
+        "id": 3,
+        "fullName": "Nguyễn Hoàng Long",
+        "email": "nghlong3004@humg.edu.vn",
+        "avatarUrl": null,
+        "role": "LECTURER",
+        "degree": "ThS."
+    }
+}
+----
+
+[source, json]
+----
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+    "requiresAdditionalInfo": false,
+    "userLoginResponse": {
+        "id": 4,
+        "fullName": "Nguyễn Hoàng Long",
+        "email": "nghlong3004@gmail.com",
+        "avatarUrl": null,
+        "role": "ADMIN",
+        "degree": null
+    }
+}
+----
+
+[source, json]
+----
+{
+  "status": 403,
+  "code": "ACCOUNT_LOCKED",
+  "message": "User account is locked."
+}
+----
+
+=== Refresh Token
+`POST /auth/refresh-token`
+
+==== Request Header
+
+[cols="1,1,4,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Cookie* | Có | Token dùng để đổi lấy Access Token khi Access token hết hạn | mnahfhque...
+|===
+
+
+==== Request Body
+> Empty
+
+==== Response Line
+* `200 - OK`
+* `401 Unauthorized`
+
+==== Response Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Response Body
+
+[cols="1,1,1,3", options="header"]
+|===
+| Name | Type | Required | Description
+
+| accessToken | String | Có | Access token mới dùng để xác minh who, what
+
+|===
+
+==== Example Response Body
+[source, json]
+----
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdW...",
+}
+----
+
+[source, json]
+----
+{
+  "status": 401,
+  "code": "INVALID_REFRESH_TOKEN",
+  "message": "Refresh token is invalid."
+}
+----
+
+[source, json]
+----
+{
+  "status": 401,
+  "code": "TOKEN_EXPIRED",
+  "message": "Refresh token has expired"
+}
+----
+
+=== Quên mật khẩu
+* `POST /auth/forgot-password`
+
+==== Request Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Request Body
+[cols="1,1,1,2", options="header"]
+|===
+| Name | Type | Required | Description
+
+| email | String | Có |  Email của người dùng
+
+|===
+
+==== Example Request Body:
+[source,json]
+----
+{  
+  "email": "nghlong3004@gmail.com"  
+}
+----
+
+==== Response Line
+** `201 - Created`
+** `404 - Not found`
+
+> và các lỗi trong bảng lỗi chung
+
+==== Response Header
+[cols="2,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Content-Type* | Có | Loại nội dung trong body | application/json
+|===
+
+==== Response Body
+
+> Empty
+
+==== Example Response Body
+[source,json]
+----
+{  
+  "email": "nghlong3004@gmail.com"  
+}
+----
+
+[source, json]
+----
+{
+  "status": 404,
+  "code": "EMAIL_NOT_FOUND",
+  "message": "No user found with the provided email."
+}
+----
+
+=== Đăng xuất
+* `POST /auth/logout`
+
+==== Request Header
+[cols="1,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Cookie* | Có | Token dùng để lấy Access token | refreshToken = qqmfhq...
+|===
+
+==== Request Body
+
+> Empty
+
+
+==== Response Line
+** `204 - No content`
+
+> và các lỗi trong bảng lỗi chung
+
+==== Response Header
+
+[cols="1,1,2,2", options="header"]
+|===
+| Metadata | Required | Description | Example
+
+| *Cookie* | Có | Token dùng để lấy Access token | refreshToken = ""
+|===
+
+
+==== Response Body
+
+> Empty
+

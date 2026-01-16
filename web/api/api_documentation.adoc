@@ -1,0 +1,122 @@
+= API SPECIFICATION: OLYMPIC KHOA HỌC CƠ BẢN
+Long Nguyen Hoang <nghlong3004@gmail.com>
+v1.2.0, 2026-01-17
+:toclevels: 3
+:sectnums:
+:source-highlighter: highlight.js
+
+'''
+
+[small]
+====
+Author: {author} +
+Email: {email} +
+
+Version: {revnumber} ({revdate})
+
+====
+
+[abstract]
+Tài liệu này mô tả các API của hệ thống Olympic, được thiết kế theo nguyên tắc thiết kế API REST của Microsoft Azure
+
+'''
+
+== Quy ước chung
+
+=== Base URL
+`https://api.olympic.humg.edu.vn/api/v1`
+
+=== Timezone
+
+UTC (Server). Frontend tự convert sang Local Time của user.
+
+=== Date Format
+ISO 8601 (`yyyy-MM-dd'T'HH:mm:ss`)
+
+=== Content-Type
+`application/json` (ngoại trừ các API upload file).
+
+=== Pagination
+Các API lấy danh sách sử dụng chuẩn query param sau:
+
+*Request*: 
+[source,http]
+----
+?page=0&size=10&sort=createdTime,desc
+----
+
+*Response*:
+[source,json]
+----
+{
+  "content": [ ... ],
+  "page_number": 0,
+  "page_size": 10,
+  "total_elements": 50,
+  "total_pages": 5
+}
+----
+
+=== Authentication
+
+**Access Token**: Tồn tại trong 15 phút, gửi trong Header `Authorization: Bearer <token>`.
+
+**Refresh Token**: Tồn tại trong 7 ngày, server tự set vào HttpOnly Cookie.
+
+=== Title
+
+[cols="2,1,5", options="header"]
+|===
+| Name | Required | Description 
+
+| *Tên API* | Có | Tên của API này là gì
+| *Request Header* | Có | Dùng để truyền siêu dữ liệu giữa client và server, cung cấp thông tin bổ sung về yêu cầu như loại trình duyệt (User-Agent), ngôn ngữ ưu tiên (Accept-Language), thông tin xác thực (Authorization), cookie, và loại nội dung chấp nhận được (Accept), giúp server hiểu và xử lý request chính xác hơn, cũng như phục vụ phản hồi phù hợp nhất.  
+| *Request Body* | Có | Dữ liệu mà client gửi tới server trong thân HTTP
+| *Example Request Body* | không | Ví dụ về dữ liệu mà client gửi tới server nằm trong thân HTTP
+| *Response Line* | Có | Trong tài liệu này mình sẽ bỏ qua phần HTTP version mà chỉ focus vào status code và reason nghĩa là mã trạng thái mà server trả về kèm theo đó là nội dung của mã trạng thái này 
+| *Response Header* | Có | Giống với Request Header, chỉ là cách nó ngược lại
+| *Response Body* | Có | Giống với Request Body
+| *Example Response Body* | không | Giống với Example Response Body
+
+|===
+
+
+
+=== Định dạng phản hồi lỗi
+
+Mọi API khi xảy ra lỗi sẽ trả về JSON định dạng:
+
+[source,json]
+----
+{
+  "status": XXX,
+  "code": "CODE_ERROR",
+  "message": "Message error."
+}
+----
+
+=== Bảng Lỗi Chung
+
+[cols="1,3,3,5", options="header"]
+|===
+| HTTP Status | Code | Message | Mô tả
+
+| *400* | VALIDATION_ERROR | "Validation failed for input data." | Dữ liệu đầu vào không hợp lệ.
+| *400* | MISSING_PARAMETER | "The required parameter is missing." | Thiếu tham số bắt buộc.
+| *400* | HTTP_MESSAGE_NOT_READABLE | "Malformed JSON request." | JSON gửi lên sai cú pháp hoặc sai kiểu dữ liệu.
+| *401* | UNAUTHORIZED | "Full authentication is required." | Chưa đăng nhập hoặc Token không hợp lệ.
+| *401* | TOKEN_EXPIRED | "Access token has expired." | Token hết hạn -> Frontend cần gọi API Refresh Token.
+| *403* | ACCESS_DENIED | "You do not have permission." | Có đăng nhập nhưng không đủ quyền hạn truy cập.
+| *404* | RESOURCE_NOT_FOUND | "Resources not found." | ID không tồn tại hoặc sai đường dẫn URL.
+| *405* | METHOD_NOT_ALLOWED | "Request method not supported." | Gọi sai method.
+| *409* | DATA_CONFLICT | "Data conflict occurred." | Xung đột dữ liệu chung.
+| *413* | PAYLOAD_TOO_LARGE | "The payload is too large." | Request body vượt quá giới hạn.
+| *415* | UNSUPPORTED_MEDIA_TYPE | "Content type not supported." | Sai Header Content-Type.
+| *429* | RATE_LIMIT_EXCEEDED | "Too many requests." | Gửi quá nhiều request trong thời gian ngắn.
+| *500* | INTERNAL_SERVER_ERROR | "Unexpected server error." | Lỗi hệ thống không xác định.
+| *503* | SERVICE_UNAVAILABLE | "Service is unavailable." | Server đang bảo trì hoặc quá tải.
+|===
+
+== Chi tiết API
+
+include::api_auth.adoc
