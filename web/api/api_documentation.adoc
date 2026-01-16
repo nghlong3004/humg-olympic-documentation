@@ -119,4 +119,4 @@ Mọi API khi xảy ra lỗi sẽ trả về JSON định dạng:
 
 == Chi tiết API
 
-include::api_auth.adoc
+include::api_auth.adoc[auth]
