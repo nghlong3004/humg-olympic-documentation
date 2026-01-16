@@ -487,31 +487,19 @@
 ----
 
 ==== Response Line
-** `201 - Created`
+** `200 - OK`
 ** `404 - Not found`
 
 > và các lỗi trong bảng lỗi chung
 
 ==== Response Header
-[cols="2,1,2,2", options="header"]
-|===
-| Metadata | Required | Description | Example
-
-| *Content-Type* | Có | Loại nội dung trong body | application/json
-|===
+> Empty
 
 ==== Response Body
 
 > Empty
 
 ==== Example Response Body
-[source,json]
-----
-{  
-  "email": "nghlong3004@gmail.com"  
-}
-----
-
 [source, json]
 ----
 {
