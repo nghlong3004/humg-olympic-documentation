@@ -20,7 +20,8 @@
 | facultyId | Integer | Không | ID Khoa của người dùng
 | password | String | Có | Mật khẩu của người dùng
 | universityId | String | Không | ID trường học của người dùng
-| fullName | String | Có | Họ và tên của ngươi dùng
+| degree | String | Không | Hàm vị của giảng viên
+| role | String | Có | Quyền cho người dùng
 
 |===
 
@@ -34,7 +35,7 @@
   "className": "DCCDTD68B",
   "facultyId": 1,
   "password": "12345678",
-  "studentType": "INTERNAL"
+  "role": "STUDENT_INTERNAL"
 }
 ----
 
@@ -46,7 +47,19 @@
   "email": "nghlong3004@gmail.com",
   "password": "12345678",
   "universityId": 1,
-  "studentType": "EXTERNAL"
+  "role": "STUDENT_EXTERNAL"
+}
+----
+
+==== Example Request Body Lecturer:
+[source,json]
+----
+{
+  "fullName": "Nguyễn Hoàng Long",
+  "email": "nghlong3004@humg.edu.vn",
+  "password": "12345678",
+  "degree": "ThS."
+  "role": "LECTURER"
 }
 ----
 
