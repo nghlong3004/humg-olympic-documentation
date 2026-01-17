@@ -19,7 +19,7 @@
 | className | String | Không | Tên lớp trên trường học của người dùng
 | facultyId | Integer | Không | ID Khoa của người dùng
 | password | String | Có | Mật khẩu của người dùng
-| universityId | String | Có | ID trường học của người dùng
+| universityId | String | Không | ID trường học của người dùng
 | fullName | String | Có | Họ và tên của ngươi dùng
 
 |===
@@ -34,7 +34,6 @@
   "className": "DCCDTD68B",
   "facultyId": 1,
   "password": "12345678",
-  "universityId": 253,
   "studentType": "INTERNAL"
 }
 ----
