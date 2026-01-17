@@ -58,7 +58,7 @@
   "fullName": "Nguyễn Hoàng Long",
   "email": "nghlong3004@humg.edu.vn",
   "password": "12345678",
-  "degree": "ThS."
+  "degree": "MASTER"
   "role": "LECTURER"
 }
 ----
