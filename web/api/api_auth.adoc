@@ -78,9 +78,25 @@
 |===
 
 ==== Response Body
-> Empty
+==== Response Header
+[cols="2,1,2,2", options="header"]
+|===
+| Name | Required | Description
+
+| *email* | Có | Email của người dùng
+| *verify*| Có | Trạng thái verify của account
+|===
 
 ==== Example Response Body
+
+[source, json]
+----
+{
+  "email": "nghlong3004@gmail.com",
+  "verify": false
+}
+----
+
 [source, json]
 ----
 {
